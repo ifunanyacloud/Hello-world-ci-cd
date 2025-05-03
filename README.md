@@ -1,0 +1,40 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main  # Trigger this workflow on pushes to the 'main' branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests
+      run: |
+        # Run your tests here, for example:
+        pytest
+
+    - name: Push changes (if needed)
+      run: |
+        git config --global user.name "Your Name"
+        git config --global user.email "your-email@example.com"
+        git add .
+        git commit -m "Automated commit message"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub provides this token automatically
+ 
